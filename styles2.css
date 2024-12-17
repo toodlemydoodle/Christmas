@@ -1,0 +1,78 @@
+html, body, .stage, .ring, .img {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    user-select: none;
+  }
+  
+  html, body, .stage {
+    overflow: hidden;
+    background: #000;
+  }
+  
+  div, svg {
+    position: absolute;
+  }
+  
+  .container {
+    position: absolute;
+    perspective: 2000px;
+    width: 300px;
+    height: 400px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .img {
+    width: 300px;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    display: block; /* Ensures initial state */
+    transition: opacity 0.5s ease, display 0.5s ease;
+  }
+  
+  /* Overlay for full image */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .overlay.hidden {
+    display: none;
+  }
+  
+  .overlay-content {
+    position: relative;
+  }
+  
+  .full-image {
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  .img.hidden {
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction with off-screen images */
+  }
+  

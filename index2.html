@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallax Photo Carousel</title>
+  <!-- Google Fonts for Cursive Christmas Style -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles2.css">
+  <style>
+    /* Thank You for the Memories Text */
+    .thank-you-text {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3.5rem;
+      color: #ffefcc; /* Warm cream for Christmas feel */
+      font-family: 'Great Vibes', cursive; /* Elegant cursive font */
+      text-shadow: 0px 0px 10px rgba(255, 223, 186, 0.8), 
+                   0px 0px 20px rgba(255, 223, 186, 0.5), 
+                   0px 0px 30px rgba(255, 0, 0, 0.5); /* Christmas glow effect */
+      z-index: 1000;
+      pointer-events: none; /* Allows clicks to pass through */
+    }
+
+    /* Snowfall Container */
+    #snowfall {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Snow doesn't interfere with clicks */
+      z-index: 1;
+    }
+
+    /* Carousel Overlay Close Button */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff6600;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Snowfall Effect -->
+  <div id="snowfall"></div>
+
+  <!-- Thank You Text -->
+  <div class="thank-you-text">Thankyou for the memories</div>
+
+  <!-- Carousel Stage -->
+  <div class="stage">
+    <div class="container">
+      <div class="ring">
+        <!-- Images rendered dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-Image Overlay -->
+  <div class="overlay hidden">
+    <div class="overlay-content">
+      <button class="close-btn">X</button>
+      <img src="" alt="Expanded Image" class="full-image">
+    </div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="carouselMusic" loop>
+    <source src="music/carousel-music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- GSAP and Zepto -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+  <script src="script2.js"></script>
+
+  <!-- Particles.js for Snowfall -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+  <script>
+    // Background Music Logic
+    const carouselMusic = document.getElementById('carouselMusic');
+    let musicStarted = false;
+
+    document.addEventListener('click', () => {
+      if (!musicStarted) {
+        carouselMusic.play().catch(err => console.log('Autoplay blocked:', err));
+        musicStarted = true; // Ensure music starts only once
+      }
+    });
+
+    // Snowfall Effect Initialization
+    particlesJS("snowfall", {
+      particles: {
+        number: { value: 150, density: { enable: true, value_area: 800 } },
+        color: { value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.7, random: true },
+        size: { value: 5, random: true },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "bottom",
+          random: false,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+        },
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: false },
+          onclick: { enable: false },
+        },
+      },
+      retina_detect: true,
+    });
+  </script>
+</body>
+</html>
