@@ -2,21 +2,21 @@ let xPos = 0;
 
 // Array of images
 const images = [
-  'images/image2.jpeg',
-  'images/image3.jpeg',
+  'images/image2.JPEG',
+  'images/image3.JPEG',
   'images/image1.jpg',
-  'images/image4.jpeg',
-  'images/image8.jpeg',
-  'images/image5.jpeg',
-  'images/image6.jpeg',
+  'images/image4.JPEG',
+  'images/image8.JPEG',
+  'images/image5.JPEG',
+  'images/image6.JPEG',
   'images/image12.jpg',
-  'images/image7.jpeg',
-  'images/image9.jpeg',
-  'images/image11.jpeg',
+  'images/image7.JPEG',
+  'images/image9.JPEG',
+  'images/image11.JPEG',
   'images/image13.jpg',
-  'images/image14.jpeg',
+  'images/image14.JPEG',
   'images/image17.jpg',
-  'images/image18.jpeg',
+  'images/image18.JPEG',
 ];
 
 const totalImages = images.length;
