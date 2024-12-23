@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Memory Lane</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles2.css">
   <style>
     body {
       background: linear-gradient(to bottom, #001a33, #003366);
@@ -26,7 +25,7 @@
       margin-bottom: 20px;
     }
 
-    .snow-globe-container {
+    .tree-container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -34,60 +33,38 @@
       position: relative;
     }
 
-    .snow-globe {
+    .christmas-tree {
       position: relative;
-      width: 300px;
+      width: 200px;
       height: 300px;
-      background: radial-gradient(circle, #ffffff, #ccccff);
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      background: url('assets/christmastree.png') no-repeat center;
+      background-size: contain;
       overflow: hidden;
-      animation: shake 0.5s ease-in-out;
       cursor: pointer;
     }
 
-    .snow-globe.shaking {
-      animation: shake 1s infinite alternate;
-    }
-
-    .snow-globe-stand {
+    .tree-stand {
       position: relative;
-      width: 300px;
-      height: 100px;
+      width: 50px;
+      height: 70px;
       background: #8b4513;
-      border-radius: 0 0 50px 50px;
+      border-radius: 5px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
       margin-top: -10px;
-      overflow: hidden;
     }
 
-    .snow-globe-stand::before {
-      content: '';
+    .ornament {
       position: absolute;
-      width: 100%;
-      height: 50%;
-      top: 0;
-      left: 0;
-      background: url('assets/santa-and-reindeer.png') no-repeat center;
-      background-size: contain;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: rotate(2deg); }
-      50% { transform: rotate(-2deg); }
-    }
-
-    .photo-display {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      height: 90%;
+      width: 40px;
+      height: 40px;
       background-size: cover;
-      background-position: center;
       border-radius: 50%;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: grab;
+    }
+
+    .ornament:active {
+      cursor: grabbing;
     }
 
     .memory-caption {
@@ -147,19 +124,23 @@
   <div id="snowfall"></div>
 
   <h1>Memory Lane</h1>
-  <p>Click the snow globe to reveal a memory!</p>
+  <p>Click an ornament to reveal a memory!</p>
 
-  <div class="snow-globe-container">
-    <div class="snow-globe" id="snowGlobe" onclick="revealMemory()">
-      <div class="photo-display" id="photoDisplay"></div>
+  <div class="tree-container">
+    <div class="christmas-tree" id="christmasTree">
+      <div class="ornament" style="top: 20%; left: 40%; background-image: url('images/image15.jpg');" onclick="revealMemory(0)"></div>
+      <div class="ornament" style="top: 30%; left: 60%; background-image: url('images/image22.jpg');" onclick="revealMemory(1)"></div>
+      <div class="ornament" style="top: 50%; left: 50%; background-image: url('images/image21.jpg');" onclick="revealMemory(2)"></div>
+      <div class="ornament" style="top: 60%; left: 35%; background-image: url('images/image19.jpg');" onclick="revealMemory(3)"></div>
+      <div class="ornament" style="top: 70%; left: 70%; background-image: url('images/image20.jpg');" onclick="revealMemory(4)"></div>
     </div>
-    <div class="snow-globe-stand"></div>
+    <div class="tree-stand"></div>
   </div>
 
-  <div class="memory-caption" id="memoryCaption">Shake the globe to see a surprise!</div>
+  <div class="memory-caption" id="memoryCaption">Decorate the tree to see a surprise!</div>
 
   <div class="music-panel">
-    <button onclick="toggleEffects()">Toggle Snow & Shake</button>
+    <button onclick="toggleEffects()">Toggle Snow & Lights</button>
   </div>
   <audio id="bgMusic" loop>
     <source src="music/final-music.mp3" type="audio/mpeg">
@@ -173,39 +154,59 @@
       document.removeEventListener('click', startMusic);
     }
     document.addEventListener('click', startMusic);
-  </script>
-
-  <script>
-    const photos = [
-      'images/image15.jpg',
-      'images/image22.jpg',
-      'images/image21.jpg',
-      'images/image19.jpg',
-      'images/image20.jpg'
-    ];
 
     const captions = [
-    'Thankyou for coming out that day to hangout with me on your birthday',
-    'First selfie of us on my phone',
-    'You taught me a lot that day about television, movies, and fashion',
-    'Thank you for this text, I really value it.',
-    'Lets have these croissants again ^^'
-];
+      'Thank you for coming out that day to hang out with me on your birthday',
+      'First selfie of us on my phone.',
+      'You taught me a lot that day about television, movies, and fashion.',
+      'Thank you for this text, I really value it.',
+      'Let’s have these croissants again ^^'
+    ];
 
-    function revealMemory() {
-      const randomIndex = Math.floor(Math.random() * photos.length);
-      const photoDisplay = document.getElementById('photoDisplay');
+    function revealMemory(index) {
       const memoryCaption = document.getElementById('memoryCaption');
+      memoryCaption.textContent = captions[index];
+    }
 
-      photoDisplay.style.backgroundImage = `url(${photos[randomIndex]})`;
-      memoryCaption.textContent = captions[randomIndex];
+    const ornaments = document.querySelectorAll('.ornament');
+    ornaments.forEach(ornament => {
+      ornament.addEventListener('mousedown', startDrag);
+    });
+
+    let activeOrnament = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function startDrag(event) {
+      activeOrnament = event.target;
+      offsetX = event.clientX - activeOrnament.offsetLeft;
+      offsetY = event.clientY - activeOrnament.offsetTop;
+
+      document.addEventListener('mousemove', dragOrnament);
+      document.addEventListener('mouseup', stopDrag);
+    }
+
+    function dragOrnament(event) {
+      if (!activeOrnament) return;
+
+      const x = event.clientX - offsetX;
+      const y = event.clientY - offsetY;
+
+      activeOrnament.style.left = `${x}px`;
+      activeOrnament.style.top = `${y}px`;
+    }
+
+    function stopDrag() {
+      activeOrnament = null;
+      document.removeEventListener('mousemove', dragOrnament);
+      document.removeEventListener('mouseup', stopDrag);
     }
 
     const snowfall = document.getElementById('snowfall');
     let snowing = false;
     let snowInterval;
 
-    function createSnowflake() { 
+    function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
 
@@ -224,9 +225,6 @@
     }
 
     function toggleEffects() {
-      const snowGlobe = document.getElementById('snowGlobe');
-      snowGlobe.classList.toggle('shaking');
-
       if (snowing) {
         clearInterval(snowInterval);
         snowing = false;
